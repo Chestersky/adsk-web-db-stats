@@ -1,0 +1,2 @@
+telegraf_url: https://dl.influxdata.com/telegraf/releases/telegraf-1.8.3-1.x86_64.rpm
+metrics_storage_ip: 3.121.220.158

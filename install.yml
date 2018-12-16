@@ -1,0 +1,20 @@
+---
+- hosts: web_nodes
+  become: yes
+  vars:
+    wp_install_directory: /var/www/wordpress
+    
+  tasks:
+    - include_tasks: tasks/manage_db.yml
+    - include_tasks: tasks/manage_wp_install.yml
+    - include_tasks: tasks/manage_telegraf.yml
+
+- hosts: db_nodes
+  become: yes
+  tasks:
+    - include_tasks: tasks/manage_db.yml
+    - include_tasks: tasks/manage_influxdb.yml
+- hosts: stats_nodes
+  become: yes
+  tasks:
+    - include_tasks: tasks/manage_grafana.yml

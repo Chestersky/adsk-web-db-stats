@@ -1,0 +1,23 @@
+---
+- name: "Install grafana"
+  yum:
+    name: "{{grafana_url}}"
+    state: present
+- copy:
+    src: templates/grafana.ini
+    dest: /etc/grafana/grafana.ini
+- service:
+    name: grafana-server
+    state: restarted
+- name: Create influxdb datasource
+  grafana_datasource:
+    name: "datasource-influxdb"
+    grafana_url: "http://3.121.202.50:8080"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    org_id: "1"
+    ds_type: "influxdb"
+    url: "http://18.196.136.236:8086"
+    database: "metrics"
+    time_interval: ">10s"
+    tls_ca_cert: "/etc/ssl/certs/ca.pem"

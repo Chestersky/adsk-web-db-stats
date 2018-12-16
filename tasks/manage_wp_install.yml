@@ -1,0 +1,35 @@
+---
+- name: "Install php"
+  yum:
+    name: "{{packages}}"
+    state: latest
+  vars:
+    packages:
+      - php
+      - php-mysql
+- name: "Install apache server"
+  yum:
+    name: httpd
+    state: latest
+- name: "configure apache"
+  template:
+    src: templates/vhost.conf
+    dest: /etc/httpd/conf.d/wordpress.conf
+- service:
+    name: httpd
+    state: restarted
+- name: "Download wordpress"
+  get_url:
+    url: https://wordpress.org/latest.zip
+    dest: ~/latest.zip
+- file:
+    path: "{{ wp_install_directory }}"
+    state: directory
+- unarchive:
+    src:  https://wordpress.org/latest.zip
+    dest: "{{ wp_install_directory }}"
+    remote_src: yes
+- name: "put wordpress configuration"
+  template:
+    src: templates/wp-config.php
+    dest: "{{ wp_install_directory }}/wp-config.php"
